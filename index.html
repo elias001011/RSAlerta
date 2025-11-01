@@ -14,10 +14,53 @@
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
+	    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+	    
+	    <style>
+	      .button-group {
+	        display: flex;
+	        justify-content: center;
+	        flex-wrap: wrap;
+	        gap: 10px;
+	      }
+	
+	      .btn-modern {
+	        display: inline-block;
+	        margin: 0; /* Removido o margin vertical e horizontal para usar o gap do button-group */
+	        padding: 12px 24px;
+	        font-size: 16px;
+	        font-weight: bold;
+	        color: #fff;
+	        background: linear-gradient(135deg, #0077ff, #00c6ff);
+	        border-radius: 8px;
+	        text-decoration: none;
+	        transition: transform 0.2s, box-shadow 0.2s;
+	        text-align: center;
+	      }
+	
+	      .btn-modern.dev-version {
+	        background: linear-gradient(135deg, var(--secondary-color), #00a080); /* Um gradiente diferente para a versão DEV */
+	      }
+	
+	      .btn-modern:hover {
+	        transform: translateY(-2px);
+	        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+	      }
+	
+	      /* Media query para telas menores */
+	      @media (max-width: 600px) {
+	        .button-group {
+	          flex-direction: column;
+	          align-items: center;
+	        }
+	        .btn-modern {
+	          width: 100%;
+	          max-width: 280px;
+	        }
+	      }
+	
+	    
         :root {
             /* Variáveis de tema escuro (padrão) */
             --bg-color: #0a0a0a;
@@ -2036,45 +2079,27 @@
                     <li><strong>v2:</strong> Funcionalidade de IA implementada</li>
                 </ul>
 
-              <div style="text-align: center; margin: 24px 0;">
-  <p style="margin-bottom: 12px;">Desenvolvido por:</p>
-  
-  <!-- Link do Instagram -->
-  <a href="https://www.instagram.com/elias_jrnunes/" target="_blank" 
-     style="color: var(--secondary-color); text-decoration: none; font-weight: 600;">
-    <i class="fab fa-instagram"></i> @elias_jrnunes
-  </a>
-
-  <!-- Botão RSAlerta -->
-  <a href="https://elias001011.github.io/RSAlerta-LandingPage" target="_blank" class="btn-modern">
-    Saiba mais sobre o RSAlerta
-  </a>
-
-  <!-- Botão versão DEV -->
-  <a href="https://rsalerta-dev.netlify.app" target="_blank" class="btn-modern">
-    Conheça a versão DEV
-  </a>
-</div>
-
-<style>
-  .btn-modern {
-    display: inline-block;
-    margin: 10px 8px;
-    padding: 12px 24px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    background: linear-gradient(135deg, #0077ff, #00c6ff);
-    border-radius: 8px;
-    text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .btn-modern:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-  }
-</style>
+	              <div style="text-align: center; margin: 24px 0;">
+	  <p style="margin-bottom: 12px;">Desenvolvido por:</p>
+	  
+	  <!-- Link do Instagram -->
+	  <a href="https://www.instagram.com/elias_jrnunes/" target="_blank" 
+	     style="color: var(--secondary-color); text-decoration: none; font-weight: 600; display: block; margin-bottom: 16px;">
+	    <i class="fab fa-instagram"></i> @elias_jrnunes
+	  </a>
+	
+	  <div class="button-group">
+	    <!-- Botão RSAlerta -->
+	    <a href="https://elias001011.github.io/RSAlerta-LandingPage" target="_blank" class="btn-modern">
+	      Saiba mais sobre o RSAlerta
+	    </a>
+	
+	    <!-- Botão versão DEV -->
+	    <a href="https://rsalerta-dev.netlify.app" target="_blank" class="btn-modern dev-version">
+	      Conheça a versão DEV
+	    </a>
+	  </div>
+	</div>
 
     <!-- Footer -->
     <footer>
@@ -3025,4 +3050,3 @@
     </script>
 </body>
 </html>
-
