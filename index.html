@@ -183,6 +183,82 @@
         }
 
         /* Mobile menu */
+
+        /* Estilos para o modal da IA */
+        .chat-interface {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-height: 0; /* Permite que o flex-grow funcione corretamente */
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            min-height: 200px; /* Garante uma altura mínima */
+        }
+
+        .web-search-status {
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--container-border);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .web-search-toggle, .chat-send-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .web-search-toggle:hover, .chat-send-btn:hover {
+            background-color: #2563eb; /* Um tom mais escuro de primary-color */
+        }
+
+        .web-search-toggle.active {
+            background-color: var(--secondary-color);
+        }
+
+        .web-search-toggle.active:hover {
+            background-color: #059669; /* Um tom mais escuro de secondary-color */
+        }
+
+        /* Fim dos estilos do modal da IA */
+
+        /* Mobile menu */
         .mobile-menu-btn {
             display: none;
             background: rgba(255, 255, 255, 0.15);
@@ -1915,19 +1991,23 @@
 
     <!-- Modal para IA -->
     <div class="modal-overlay" id="ai-modal">
-        <div class="modal">
+        <div class="modal" style="display: flex; flex-direction: column; max-height: 90vh;">
             <button class="modal-close" id="close-ai-modal">
                 <i class="fas fa-times"></i>
             </button>
-            <h2>Conversar com a IA</h2>
+            <h2><i class="fas fa-robot"></i> Assistente Climático</h2>
             <div class="chat-interface">
                 <div class="chat-messages" id="chat-messages">
                     <div class="message ai">
                         Olá! Sou o assistente climático do RSAlerta. Como posso ajudar você hoje com informações sobre clima, prevenção de enchentes ou sustentabilidade?
                     </div>
                 </div>
+                <div class="web-search-status" id="web-search-status">A busca na web está ativa</div>
                 <div class="chat-input-container">
                     <input type="text" class="chat-input" id="chat-input" placeholder="Digite sua mensagem...">
+                    <button class="web-search-toggle" id="web-search-toggle" title="Ativar/Desativar busca na web">
+                        <i class="fas fa-search"></i>
+                    </button>
                     <button class="chat-send-btn" id="chat-send-btn">
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -1936,6 +2016,36 @@
         </div>
     </div>
     
+    <!-- Modal de Histórico de Versões -->
+    <div class="modal-overlay" id="version-history-modal">
+        <div class="modal">
+            <button class="modal-close" id="close-version-history-modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2><i class="fas fa-history"></i> Histórico de Versões do RSAlerta</h2>
+            <div style="margin-bottom: 24px;">
+                <p style="margin-bottom: 16px;">Acompanhe as principais atualizações e melhorias do RSAlerta.</p>
+                
+                <h3 style="color: var(--primary-color); margin: 20px 0 12px 0;">Versões Estáveis:</h3>
+                <ul style="padding-left: 20px; margin-bottom: 20px; font-size: 0.9rem;">
+                    <li><strong>v7 (01 de Novembro, 2025):</strong> Busca web implementada na IA oficialmente e outras pequenas melhorias e correções de bugs</li>
+                    <li><strong>v6 (19 de Agosto, 2025):</strong> Adição do favicon</li>
+                    <li><strong>v5 (16 de Maio, 2025):</strong> Design modificado para condizer as cores do RS e ficar mais moderno, além adição de novos links, notícias, informações climáticas, tema translúcido e IA melhorada com acesso a informações do site e modal próprio para a mesma, além da adição de novas dicas de sustentabilidade, animações e efeitos visuais</li>
+                    <li><strong>v4:</strong> Redesign para ficar mais moderno</li>
+                    <li><strong>v3:</strong> Mapa climático funcional implementado</li>
+                    <li><strong>v2:</strong> Funcionalidade de IA implementada</li>
+                </ul>
+
+                <div style="text-align: center; margin: 24px 0;">
+                    <p style="margin-bottom: 12px;">Desenvolvido por:</p>
+                    <a href="https://www.instagram.com/elias_jrnunes/" target="_blank" style="color: var(--secondary-color); text-decoration: none; font-weight: 600;">
+                        <i class="fab fa-instagram"></i> @elias_jrnunes
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
@@ -1964,7 +2074,12 @@
             </div>
         </div>
         <div class="footer-bottom">
-            © 2025 RSAlerta - Todos os direitos reservados
+            <p>© 2025 RSAlerta - Todos os direitos reservados</p>
+            <p>
+                <button id="version-history-btn" style="background: none; border: none; color: var(--primary-color); cursor: pointer; font-weight: 600; text-decoration: underline; font-size: 0.9rem; padding: 0;">
+                    Conferir histórico de versões.
+                </button>
+            </p>
         </div>
     </footer>
     
@@ -1986,6 +2101,7 @@
         let forecastData = null;
         let airQualityData = null;
         let chatHistory = [];
+        let webSearchEnabled = true; // Ativado por padrão na versão normal, conforme a dev
         
         // DOM Elements
         const citySearchInput = document.getElementById('city-search');
@@ -1997,6 +2113,8 @@
         const chatMessages = document.getElementById('chat-messages');
         const chatInput = document.getElementById('chat-input');
         const chatSendBtn = document.getElementById('chat-send-btn');
+        const webSearchToggle = document.getElementById('web-search-toggle');
+        const webSearchStatus = document.getElementById('web-search-status');
         const currentTimeEl = document.getElementById('current-time');
         const currentDateEl = document.getElementById('current-date');
         const mapControlBtns = document.querySelectorAll('.map-control-btn');
@@ -2005,6 +2123,9 @@
         const nav = document.querySelector('nav');
         
         // Modal elements
+        const versionHistoryModal = document.getElementById('version-history-modal');
+        const closeVersionHistoryModal = document.getElementById('close-version-history-modal');
+        const versionHistoryBtn = document.getElementById('version-history-btn');
         const sustainabilityModal = document.getElementById('sustainability-modal');
         const aiModal = document.getElementById('ai-modal');
         const moreTipsBtn = document.getElementById('more-tips-btn');
@@ -2024,6 +2145,7 @@
             setInterval(updateDateTime, 1000);
             loadWeatherData(currentCity);
             setupEventListeners();
+            updateWebSearchStatus(); // Inicializa o status da busca web
             
             // Load saved theme from localStorage
             const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -2472,13 +2594,25 @@
             }, 300);
         }
         
+        function openVersionHistoryModal() {
+            versionHistoryModal.classList.add('active');
+            document.body.classList.add('modal-open');
+        }
+        
+        function closeVersionHistoryModalFunc() {
+            versionHistoryModal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+        }
+
         function closeAiModalFunc() {
             aiModal.classList.remove('active');
             document.body.classList.remove('modal-open');
         }
         
-        // Send message to AI
+        // Send message to AI with web search capability
         async function sendMessageToAI(message) {
+            if (!message.trim()) return;
+            
             // Add user message to chat
             addMessageToChat(message, 'user');
             
@@ -2583,9 +2717,10 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        model: 'gpt-4.1-nano-2025-04-14',
+                        model: 'gpt-4.1-nano-2025-04-14', // Revertido para o modelo original da OpenAI
                         messages: conversationHistory,
-                        temperature: 0.7
+                        temperature: 0.7,
+                        useWebSearch: webSearchEnabled // Adiciona a flag de busca web
                     })
                 });
                 
@@ -2689,6 +2824,25 @@
             return days[date.getDay()];
         }
         
+        // Web search toggle function
+        function toggleWebSearch() {
+            webSearchEnabled = !webSearchEnabled;
+            updateWebSearchStatus();
+        }
+
+        // Update web search status display
+        function updateWebSearchStatus() {
+            if (webSearchEnabled) {
+                webSearchStatus.textContent = 'A busca na web está ativa';
+                webSearchStatus.style.backgroundColor = 'var(--secondary-color)';
+                webSearchToggle.classList.add('active');
+            } else {
+                webSearchStatus.textContent = 'A busca na web está desativada';
+                webSearchStatus.style.backgroundColor = 'var(--accent-color)';
+                webSearchToggle.classList.remove('active');
+            }
+        }
+        
         // Set theme
         function setTheme(theme) {
             // Remove all theme classes
@@ -2773,11 +2927,16 @@
                     sendMessageToAI(chatInput.value.trim());
                 }
             });
+
+            // Web search toggle
+            webSearchToggle.addEventListener('click', toggleWebSearch);
             
             // Modal event listeners
             moreTipsBtn.addEventListener('click', openSustainabilityModal);
             closeSustainabilityModal.addEventListener('click', closeSustainabilityModalFunc);
             closeAiModal.addEventListener('click', closeAiModalFunc);
+            versionHistoryBtn.addEventListener('click', openVersionHistoryModal);
+            closeVersionHistoryModal.addEventListener('click', closeVersionHistoryModalFunc);
             
             // Close modals when clicking overlay
             sustainabilityModal.addEventListener('click', (e) => {
@@ -2800,6 +2959,9 @@
                     }
                     if (aiModal.classList.contains('active')) {
                         closeAiModalFunc();
+                    }
+                    if (versionHistoryModal.classList.contains('active')) {
+                        closeVersionHistoryModalFunc();
                     }
                 }
             });
