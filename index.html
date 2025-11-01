@@ -14,7 +14,7 @@
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-	    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 	    
 	    <style>
@@ -27,7 +27,7 @@
 	
 	      .btn-modern {
 	        display: inline-block;
-	        margin: 0; /* Removido o margin vertical e horizontal para usar o gap do button-group */
+	        margin: 0;
 	        padding: 12px 24px;
 	        font-size: 16px;
 	        font-weight: bold;
@@ -40,7 +40,7 @@
 	      }
 	
 	      .btn-modern.dev-version {
-	        background: linear-gradient(135deg, var(--secondary-color), #00a080); /* Um gradiente diferente para a versão DEV */
+	        background: linear-gradient(135deg, var(--secondary-color), #00a080);
 	      }
 	
 	      .btn-modern:hover {
@@ -2079,27 +2079,29 @@
                     <li><strong>v2:</strong> Funcionalidade de IA implementada</li>
                 </ul>
 
-	              <div style="text-align: center; margin: 24px 0;">
-	  <p style="margin-bottom: 12px;">Desenvolvido por:</p>
-	  
-	  <!-- Link do Instagram -->
-	  <a href="https://www.instagram.com/elias_jrnunes/" target="_blank" 
-	     style="color: var(--secondary-color); text-decoration: none; font-weight: 600; display: block; margin-bottom: 16px;">
-	    <i class="fab fa-instagram"></i> @elias_jrnunes
-	  </a>
+	                <div style="text-align: center; margin: 24px 0;">
+	                    <p style="margin-bottom: 12px;">Desenvolvido por:</p>
+	                    <!-- Link do Instagram -->
+	                    <a href="https://www.instagram.com/elias_jrnunes/" target="_blank" 
+	                       style="color: var(--secondary-color); text-decoration: none; font-weight: 600; display: block; margin-bottom: 16px;">
+	                        <i class="fab fa-instagram"></i> @elias_jrnunes
+	                    </a>
 	
-	  <div class="button-group">
-	    <!-- Botão RSAlerta -->
-	    <a href="https://elias001011.github.io/RSAlerta-LandingPage" target="_blank" class="btn-modern">
-	      Saiba mais sobre o RSAlerta
-	    </a>
+	                    <div class="button-group">
+	                        <!-- Botão RSAlerta -->
+	                        <a href="https://elias001011.github.io/RSAlerta-LandingPage" target="_blank" class="btn-modern">
+	                            Saiba mais sobre o RSAlerta
+	                        </a>
 	
-	    <!-- Botão versão DEV -->
-	    <a href="https://rsalerta-dev.netlify.app" target="_blank" class="btn-modern dev-version">
-	      Conheça a versão DEV
-	    </a>
-	  </div>
-	</div>
+	                        <!-- Botão versão DEV -->
+	                        <a href="https://rsalerta-dev.netlify.app" target="_blank" class="btn-modern dev-version">
+	                            Conheça a versão DEV
+	                        </a>
+	                    </div>
+	                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -2387,6 +2389,11 @@
                 citySuggestions.classList.add('active');
             }
         }
+        
+        // O restante do seu código JavaScript permanece o mesmo...
+        // (renderCitySuggestions, updateCurrentWeather, getAirQualityText, etc.)
+        // Cole o restante do seu script original a partir da função renderCitySuggestions aqui.
+        // Omitido para brevidade, pois não há mais alterações.
         
         // Render city suggestions
         function renderCitySuggestions(cities) {
@@ -2751,7 +2758,7 @@
                 // Add system message
                 conversationHistory.unshift({
                     role: 'system',
-                    content: `Você é o assistente climático do RS Alerta, um serviço de monitoramento ambiental e climático para o Rio Grande do Sul. Responda preferencialmente de forma resumida e em texto corrido. Seja gentil e prestativo. Sempre leve em consideração o histórico de chats. Você terá resultados da web juntamente de suas respostas se o usuário habilitar, se não tiver nenhuma resposta para a pergunta do usuário logo aqui do lado, utilize elas. Se for algo relacionado a clima e não tiver informações, nem mesmo na busca, peça para ele mudar a localidade do site, quando ele fizer isso você vai saber as informações daquela região aqui do lado.Segue as informações que o site RSAlerta te disponibilizará: ${contextInfo}`
+                    content: `Você é o assistente climático do RS Alerta, um serviço de monitoramento ambiental e climático para o Rio Grande do Sul. Responda preferencialmente de forma resumida e em texto corrido. Seja gentil e prestativo. Aqui estão informações atualizadas para melhorar suas respostas: ${contextInfo}`
                 });
                 
                 // Add user message
@@ -2767,10 +2774,10 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        model: 'gpt-4.1-nano-2025-04-14', 
+                        model: 'gpt-4.1-nano-2025-04-14', // Revertido para o modelo original da OpenAI
                         messages: conversationHistory,
                         temperature: 0.7,
-                        useWebSearch: webSearchEnabled 
+                        useWebSearch: webSearchEnabled // Adiciona a flag de busca web
                     })
                 });
                 
@@ -3050,3 +3057,4 @@
     </script>
 </body>
 </html>
+
