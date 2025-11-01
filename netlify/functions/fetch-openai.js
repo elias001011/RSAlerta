@@ -1,5 +1,4 @@
-// netlify/functions/fetch-openai.js - VERSÃO ATUALIZADA COM BUSCA WEB
-// Baseado na versão dev, adaptado para usar Gemini e incluir a lógica de busca web.
+// netlify/functions/fetch-openai.js - VERSÃO ATUALIZADA COM BUSCA WEB (OpenAI)
 
 exports.handler = async (event) => {
   // Permite apenas requisições POST
@@ -9,20 +8,18 @@ exports.handler = async (event) => {
 
   try {
     // Parse os dados enviados pelo frontend (histórico da conversa, modelo, etc.)
-    // Adicionado 'useWebSearch' para compatibilidade com a lógica de busca web
     const { messages, model, temperature, useWebSearch } = JSON.parse(event.body);
     
     // Obtenha as chaves API das variáveis de ambiente do Netlify
-    // Alterado para usar GEMINI_API, conforme a versão dev
-    const geminiApiKey = process.env.GEMINI_API;
+    const openAIKey = process.env.OPENAI_API_KEY; // Chave da OpenAI
     const searchApiKey = process.env.SEARCH_API;
     const searchEngineId = process.env.SEARCH_ID;
 
-    if (!geminiApiKey) {
-      console.error('Chave da API Gemini não configurada nas variáveis de ambiente.');
+    if (!openAIKey) {
+      console.error('Chave da API OpenAI não configurada nas variáveis de ambiente.');
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: 'Configuração do servidor incompleta. Chave Gemini ausente.' })
+        body: JSON.stringify({ error: 'Configuração do servidor incompleta. Chave OpenAI ausente.' })
       };
     }
 
@@ -57,7 +54,7 @@ exports.handler = async (event) => {
                 link: item.link
               }));
               
-              // Criar contexto mais claro e específico para o Gemini
+              // Criar contexto mais claro e específico para a IA
               const searchContext = `[🌐 INFORMAÇÕES ATUALIZADAS DA WEB]\nBusca realizada para: "${searchQuery}"\n\n${searchResults.map((result, index) => 
                 `📍 Resultado ${index + 1}:\nTítulo: ${result.title}\nInformação: ${result.snippet}\nFonte: ${result.link}\n`
               ).join('\n')}\n[📋 FIM DAS INFORMAÇÕES WEB]\n\nIMPORTANTE: Use as informações acima para complementar sua resposta. Se as informações web não forem relevantes para a pergunta, diga isso claramente.\n\nPergunta original: `;
@@ -84,113 +81,46 @@ exports.handler = async (event) => {
       console.log('⚠️ BUSCA WEB SOLICITADA, MAS CHAVES NÃO CONFIGURADAS');
     }
 
-    // Converter mensagens do formato OpenAI para o formato Gemini
-    const geminiContents = convertMessagesToGeminiFormat(enhancedMessages);
-
-    // Definir o modelo (usar o solicitado ou padrão)
-    const geminiModel = model || 'gemini-2.5-flash-lite';
-
-    console.log('🚀 ENVIANDO PARA GEMINI:', geminiModel);
-
-    // Faça a chamada para a API do Gemini
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent?key=${geminiApiKey}`, {
+    // Faça a chamada para a API da OpenAI
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${openAIKey}` // A chave API é usada aqui, no servidor
       },
       body: JSON.stringify({
-        contents: geminiContents.contents,
-        systemInstruction: geminiContents.systemInstruction,
-        generationConfig: {
-          temperature: temperature || 0.7,
-          maxOutputTokens: 2048,
-          topK: 40,
-          topP: 0.95
-        }
+        model: model || 'gpt-4.1-nano-2025-04-14', // Use o modelo passado ou o padrão da OpenAI
+        messages: enhancedMessages, // Usa as mensagens aprimoradas com contexto de busca
+        temperature: temperature || 0.7
       })
     });
 
     const data = await response.json();
 
-    // Se a API do Gemini retornar um erro
+    // Se a API da OpenAI retornar um erro
     if (!response.ok) {
-      console.error('❌ ERRO DA API GEMINI:', data);
+      console.error('Erro da API OpenAI:', data);
       return {
         statusCode: response.status,
-        body: JSON.stringify({ error: data.error ? data.error.message : 'Falha ao buscar da API Gemini' })
+        // Tente passar a mensagem de erro da OpenAI, se disponível
+        body: JSON.stringify({ error: data.error ? data.error.message : 'Falha ao buscar da API OpenAI' })
       };
     }
 
-    // Converter a resposta do Gemini para o formato compatível com OpenAI
-    const convertedResponse = convertGeminiResponseToOpenAI(data);
-
-    console.log('✅ RESPOSTA ENVIADA COM SUCESSO');
-
-    // Retorne a resposta convertida para o frontend
+    // Retorne a resposta da OpenAI para o frontend
     return {
       statusCode: 200,
-      body: JSON.stringify(convertedResponse)
+      body: JSON.stringify(data)
     };
 
   } catch (error) {
-    console.error('❌ ERRO GERAL NA FUNÇÃO NETLIFY:', error);
+    console.error('Erro na função Netlify:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message || 'Erro interno do servidor' })
     };
   }
 };
-
-// Função para converter mensagens do formato OpenAI para Gemini
-function convertMessagesToGeminiFormat(messages) {
-  let systemInstruction = null;
-  const contents = [];
-
-  for (const message of messages) {
-    if (message.role === 'system') {
-      // Usar a primeira mensagem system como systemInstruction
-      if (!systemInstruction) {
-        systemInstruction = {
-          parts: [{ text: message.content }]
-        };
-      }
-    } else if (message.role === 'user') {
-      contents.push({
-        role: 'user',
-        parts: [{ text: message.content }]
-      });
-    } else if (message.role === 'assistant') {
-      contents.push({
-        role: 'model',
-        parts: [{ text: message.content }]
-      });
-    }
-  }
-
-  return {
-    contents,
-    systemInstruction
-  };
-}
-
-// Função para converter resposta do Gemini para formato compatível com OpenAI
-function convertGeminiResponseToOpenAI(geminiResponse) {
-  if (!geminiResponse.candidates || !geminiResponse.candidates[0] || !geminiResponse.candidates[0].content) {
-    console.error('❌ RESPOSTA INVÁLIDA DO GEMINI:', geminiResponse);
-    throw new Error('Resposta inválida da API Gemini');
-  }
-
-  const content = geminiResponse.candidates[0].content.parts[0].text;
-
-  return {
-    choices: [{
-      message: {
-        content: content,
-        role: 'assistant'
-      }
-    }]
-  };
-}
 
 // FUNÇÃO DE EXTRAÇÃO INTELIGENTE DE TERMOS (Copiada da versão dev)
 function extractSearchTerms(message) {
