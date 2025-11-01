@@ -2036,15 +2036,45 @@
                     <li><strong>v2:</strong> Funcionalidade de IA implementada</li>
                 </ul>
 
-                <div style="text-align: center; margin: 24px 0;">
-                    <p style="margin-bottom: 12px;">Desenvolvido por:</p>
-                    <a href="https://www.instagram.com/elias_jrnunes/" target="_blank" style="color: var(--secondary-color); text-decoration: none; font-weight: 600;">
-                        <i class="fab fa-instagram"></i> @elias_jrnunes
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+              <div style="text-align: center; margin: 24px 0;">
+  <p style="margin-bottom: 12px;">Desenvolvido por:</p>
+  
+  <!-- Link do Instagram -->
+  <a href="https://www.instagram.com/elias_jrnunes/" target="_blank" 
+     style="color: var(--secondary-color); text-decoration: none; font-weight: 600;">
+    <i class="fab fa-instagram"></i> @elias_jrnunes
+  </a>
+
+  <!-- Botão RSAlerta -->
+  <a href="https://elias001011.github.io/RSAlerta-LandingPage" target="_blank" class="btn-modern">
+    Saiba mais sobre o RSAlerta
+  </a>
+
+  <!-- Botão versão DEV -->
+  <a href="https://rsalerta-dev.netlify.app" target="_blank" class="btn-modern">
+    Conheça a versão DEV
+  </a>
+</div>
+
+<style>
+  .btn-modern {
+    display: inline-block;
+    margin: 10px 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #0077ff, #00c6ff);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  }
+</style>
 
     <!-- Footer -->
     <footer>
@@ -2332,11 +2362,6 @@
                 citySuggestions.classList.add('active');
             }
         }
-        
-        // O restante do seu código JavaScript permanece o mesmo...
-        // (renderCitySuggestions, updateCurrentWeather, getAirQualityText, etc.)
-        // Cole o restante do seu script original a partir da função renderCitySuggestions aqui.
-        // Omitido para brevidade, pois não há mais alterações.
         
         // Render city suggestions
         function renderCitySuggestions(cities) {
@@ -2701,7 +2726,7 @@
                 // Add system message
                 conversationHistory.unshift({
                     role: 'system',
-                    content: `Você é o assistente climático do RS Alerta, um serviço de monitoramento ambiental e climático para o Rio Grande do Sul. Responda preferencialmente de forma resumida e em texto corrido. Seja gentil e prestativo. Você terá resultados da web juntamente de suas respostas se o usuário habilitar, se não tiver nenhuma resposta para a pergunta do usuário logo aqui do lado, utilize elas e informe que está usando a busca, ao lado estarão informações que o site RSAlerta te disponibilizará. Caso o usuário não tenha ativado a busca e você não souber como responder, peça para ele ativar a busca web no site, se for algo relacionado a clima e não tiver informações, nem mesmo na busca, peça para ele mudar a localidade do site, quando ele fizer isso você vai saber as informações daquela região aqui do lado: ${contextInfo}`
+                    content: `Você é o assistente climático do RS Alerta, um serviço de monitoramento ambiental e climático para o Rio Grande do Sul. Responda preferencialmente de forma resumida e em texto corrido. Seja gentil e prestativo. Sempre leve em consideração o histórico de chats. Você terá resultados da web juntamente de suas respostas se o usuário habilitar, se não tiver nenhuma resposta para a pergunta do usuário logo aqui do lado, utilize elas. Se for algo relacionado a clima e não tiver informações, nem mesmo na busca, peça para ele mudar a localidade do site, quando ele fizer isso você vai saber as informações daquela região aqui do lado.Segue as informações que o site RSAlerta te disponibilizará: ${contextInfo}`
                 });
                 
                 // Add user message
@@ -2717,10 +2742,10 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        model: 'gpt-4.1-nano-2025-04-14', // Revertido para o modelo original da OpenAI
+                        model: 'gpt-4.1-nano-2025-04-14', 
                         messages: conversationHistory,
                         temperature: 0.7,
-                        useWebSearch: webSearchEnabled // Adiciona a flag de busca web
+                        useWebSearch: webSearchEnabled 
                     })
                 });
                 
