@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 exports.handler = async (event, context) => {
     // A chave da API deve ser armazenada como uma variável de ambiente no Netlify
@@ -24,15 +24,15 @@ exports.handler = async (event, context) => {
     const tileUrl = `https://tile.openweathermap.org/map/${layer}/${z}/${x}/${y}.png?appid=${API_KEY}`;
 
     try {
-        const response = await fetch(tileUrl);
+        const response = await axios.get(tileUrl, { responseType: 'arraybuffer' });
 
-        if (!response.ok) {
-            throw new Error(`Erro ao buscar tile: ${response.statusText}`);
+        if (response.status !== 200) {
+            throw new Error(`Erro ao buscar tile: ${response.status} ${response.statusText}`);
         }
 
         // O Netlify Functions pode lidar com o streaming de binários (como imagens)
         // usando o 'isBase64Encoded' e convertendo o buffer.
-        const buffer = await response.buffer();
+        const buffer = Buffer.from(response.data, 'binary');
         
         return {
             statusCode: 200,
