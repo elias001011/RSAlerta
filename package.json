@@ -13,6 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "node-fetch": "^2.6.7",
     "axios": "^1.6.8"
   }
 }
+
