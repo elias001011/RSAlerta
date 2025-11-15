@@ -2260,7 +2260,7 @@
             
             // Add the selected weather layer, usando o endpoint de proxy do Netlify
             // A chave da API é adicionada de forma segura no backend.
-            const layerUrl = `/.netlify/functions/fetch-map-tile?layer=${getLayerCode(layerType)}&z={z}&x={x}&y={y}`;
+            const layerUrl = `/.netlify/functions/fetch-weather?endpoint=tile&layer=${getLayerCode(layerType)}&z={z}&x={x}&y={y}`;
             
             weatherLayer = L.tileLayer(layerUrl, {
                 attribution: '&copy; OpenWeatherMap',
