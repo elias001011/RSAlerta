@@ -2196,7 +2196,8 @@
         
         // Initialize the application
         document.addEventListener('DOMContentLoaded', async () => {
-            await fetchApiKey(); // Busca a chave da API primeiro
+            // A chave da API agora é gerenciada no backend (fetch-weather.js)
+            // Não é mais necessário buscar a chave no frontend.
             initMap();
             updateDateTime();
             setInterval(updateDateTime, 1000);
@@ -2209,10 +2210,7 @@
             setTheme(savedTheme);
         });
 
-        // A chave da API para os tiles do mapa será tratada via proxy no backend.
-// A função fetchApiKey e a variável weatherApiKey não são mais necessárias.
-        // Função removida para evitar a exposição da chave no frontend.
-        // A chave será usada apenas no backend (Netlify Function).
+        // Função fetchApiKey removida, pois a chave agora é gerenciada no backend.
         
         // Initialize Leaflet map
         function initMap() {
@@ -2258,7 +2256,7 @@
                 return;
             }
             
-            // Add the selected weather layer, usando o endpoint de proxy do Netlify
+            // Add the selected weather layer, usando o endpoint de proxy consolidado no fetch-weather.js
             // A chave da API é adicionada de forma segura no backend.
             const layerUrl = `/.netlify/functions/fetch-weather?endpoint=tile&layer=${getLayerCode(layerType)}&z={z}&x={x}&y={y}`;
             
