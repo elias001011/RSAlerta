@@ -2209,20 +2209,10 @@
             setTheme(savedTheme);
         });
 
-        // Nova função para buscar a chave da API do backend
-        async function fetchApiKey() {
-            try {
-                const response = await fetch('/.netlify/functions/get-api-key');
-                if (!response.ok) {
-                    throw new Error('Não foi possível buscar a chave da API');
-                }
-                const data = await response.json();
-                weatherApiKey = data.apiKey;
-            } catch (error) {
-                console.error('Erro ao buscar a chave da API:', error);
-                // Você pode adicionar um tratamento de erro aqui, como mostrar uma mensagem ao usuário
-            }
-        }
+        // A chave da API para os tiles do mapa será tratada via proxy no backend.
+// A função fetchApiKey e a variável weatherApiKey não são mais necessárias.
+        // Função removida para evitar a exposição da chave no frontend.
+        // A chave será usada apenas no backend (Netlify Function).
         
         // Initialize Leaflet map
         function initMap() {
@@ -2258,11 +2248,6 @@
         
         // Change map layer based on selection
         function changeMapLayer(layerType) {
-            if (!weatherApiKey) {
-                console.error("A chave da API para os tiles do mapa não está disponível.");
-                return; // Não prosseguir se a chave não foi buscada
-            }
-
             // Remove existing weather layer if any
             if (weatherLayer) {
                 map.removeLayer(weatherLayer);
@@ -2273,8 +2258,9 @@
                 return;
             }
             
-            // Add the selected weather layer
-            const layerUrl = `https://tile.openweathermap.org/map/${getLayerCode(layerType)}/{z}/{x}/{y}.png?appid=${weatherApiKey}`;
+            // Add the selected weather layer, usando o endpoint de proxy do Netlify
+            // A chave da API é adicionada de forma segura no backend.
+            const layerUrl = `/.netlify/functions/fetch-map-tile?layer=${getLayerCode(layerType)}&z={z}&x={x}&y={y}`;
             
             weatherLayer = L.tileLayer(layerUrl, {
                 attribution: '&copy; OpenWeatherMap',
